@@ -2,30 +2,57 @@
   "version": "1.2",
   "settings": [
     {
-      "id": "sdk",
-      "name": "The name of the MoveApps SDK",
-      "description": "Showcase requesting a string input from the users of your app.",
-      "defaultValue": "MoveApps SDK",
-      "type": "STRING"
+      "id": "eps1",
+      "name": "Spatial connectivity radius (metres)",
+      "description": "",
+      "defaultValue": 25,
+      "type": "NUMERIC"
     },
     {
-      "id": "year",
-      "name": "The year",
-      "description": "Insert description for the year setting setting",
-      "defaultValue": 2022,
+      "id": "eps2",
+      "name": "Temporal connectivity radius (days)",
+      "description": "",
+      "defaultValue": 7,
+      "type": "NUMERIC"
+    },
+    {
+      "id": "minPts",
+      "name": "Core point size",
+      "description": "",
+      "defaultValue": 8,
       "type": "INTEGER"
     },
     {
-      "id": "auxiliary-file-a",
-      "name": "Personalization",
-      "description": "You can personalize the app by providing a file",
-      "type": "USER_FILE"
+      "id": "Startdate",
+      "name": "Start Date",
+      "description": "",
+      "defaultValue": null,
+      "type": "NUMERIC"
+    },
+    {
+      "id": "enddate",
+      "name": "End Date",
+      "description": "",
+      "defaultValue": null,
+      "type": "NUMERIC"
     }
   ],
   "dependencies": {
     "R": [
       {
         "name": "lubridate"
+      },
+      {
+        "name": "dplyr"
+      },
+      {
+        "name": "magrittr"
+      },
+      {
+        "name": "dbscan"
+      },
+      {
+        "name": "sf"
       },
       {
         "name": "move2"

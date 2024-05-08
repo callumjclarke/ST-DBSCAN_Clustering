@@ -6,3 +6,4 @@
 data/output/**
 !data/output/.keep
 tests/testthat/plot.png
+data/raw/input5_hyena.rds

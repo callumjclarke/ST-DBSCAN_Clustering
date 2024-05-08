@@ -1,4 +1,7 @@
 {
-    "sdk": "MoveApps R SDK",
-    "year": 2004
+    "eps1": 25,
+    "eps2": 7,
+    "minPts": 8,
+    "startdate": null,
+    "enddate": null
 }
