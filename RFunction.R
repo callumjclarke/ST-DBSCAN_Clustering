@@ -99,7 +99,7 @@ st_dbscan <- function(data, eps1, eps2, minpts, epsg = 29333) {
     warning("No clusters are identified within the dataset. Returning input")
     return(
       data %>%
-        mutate(xy.clust = 0)
+        mutate(xy.clust = NA)
     )
   }
   
@@ -150,7 +150,7 @@ st_dbscan <- function(data, eps1, eps2, minpts, epsg = 29333) {
     warning("No temporal clusters have been generated. Returning")
     return(
       data %>%
-        mutate(xy.clust = 0)
+        mutate(xy.clust = NA)
     )
   }
   

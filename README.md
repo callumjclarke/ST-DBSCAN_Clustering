@@ -1,39 +1,51 @@
-# Name of App *(Give your app a short and informative title. Please adhere to our convention of Title Case without hyphens (e.g. My New App))*
+# STDBSCAN Cluster Detection
 
 MoveApps
 
-Github repository: *github.com/yourAccount/Name-of-App* *(the link to the repository where the code of the app can be found must be provided)*
+Github repository: *github.com/callumjclarke/ST-DBSCAN_Clustering*
 
 ## Description
-*Enter here the short description of the App that might also be used when filling out the description when submitting the App to Moveapps. This text is directly presented to Users that look through the list of Apps when compiling Workflows.*
+
+*This MoveApp is a limited adaptation of the ST-DBSCAN (Birant & Kut, 2007) spatiotemporal clustering process for event identification.*
+
+Spatiotemporal Density-Based Spatial Clustering of Applications with Noise (ST-DBSCAN) is an extension of the DBSCAN clustering algorithm for spatiotemporal data. We implement a section of the work proposed by Birant & Kut (2007).
 
 ## Documentation
-*Enter here a detailed description of your App. What is it intended to be used for. Which steps of analyses are performed and how. Please be explicit about any detail that is important for use and understanding of the App and its outcomes.*
+
+Two reachability distances are defined: a maximum *spatial* reachability distance (eps1) and a maximum *temporal* reachability distance (eps2). Generated clusters constitute points that are both spatially-reachable and temporally-reachable.
+
+The data is first filtered to the user-selected window (defaulting to the full dataset). The clustering is then performed through a spatial DBSCAN process on the full dataset, followed by a secondary temporal DBSCAN on each individually-identified spatial cluster. The resulting clusters are, by definition, the union of spatial connectivity and temporal connectivity.
+
+Each location's associated cluster ID is attached to the output data as an additional column called *xy.clust.*
 
 ### Input data
-*Indicate which type of input data the App requires. Currently only R objects of class `MoveStack` can be used. This will be extend in the future.*
 
-*Example*: MoveStack in Movebank format
+*move2* location object. This app performs best if the input data is in UTM format. See MoveApp *Standardise Formats and Calculate Basic Statistics* for conversion to UTM data.
 
 ### Output data
-*Indicate which type of output data the App produces to be passed on to subsequent apps. Currently only R objects of class `MoveStack` can be used. This will be extend in the future. In case the App does not pass on any data (e.g. a shiny visualization app), it can be also indicated here that no output is produced to be used in subsequent apps.*
 
-*Example:* MoveStack in Movebank format
+*Move2* location object with appended cluster ID column *xy.clust.*
 
 ### Artefacts
-*If the App creates artefacts (e.g. csv, pdf, jpeg, shapefiles, etc), please list them here and describe each.*
 
-*Example:* `rest_overview.csv`: csv-file with Table of all rest site properties
+*None.*
 
-### Settings 
-*Please list and define all settings/parameters that the App requires to be set by the App user, if necessary including their unit.*
+### Settings
 
-*Example:* `Radius of resting site` (radius): Defined radius the animal has to stay in for a given duration of time for it to be considered resting site. Unit: `metres`.
+`eps1:` Maximum cluster spatial reachability. The maximum distance (in metres, if the data is in UTM format) between two locations defined as *spatially-reachable* from one another.
+
+`eps2:` Maximum cluster temporal reachability. The maximum time difference (in days) between two locations defined as *temporally-reachable* from one another.
+
+`minPts:` The minimum number of connected points to constitute a *Core Point* which can form a cluster.
+
+`Startdate:` If applicable, the start date of the clustering period. Data will be filtered to this period. Defaults to the earliest timestamp within the dataset if not provided.
+
+`Enddate:` If applicable, the end date of the clustering period. Data will be filtered to this period. Defaults to the final timestamp within the dataset if not provided.
 
 ### Most common errors
-*Please describe shortly what most common errors of the App can be, how they occur and best ways of solving them.*
+
+`Data not in UTM format:` If data provided is within WGS84, however `eps1` is still provided in metres, it is likely that all locations will form one cluster. Use a separate MoveApp to convert to UTM data before this MoveApp.
 
 ### Null or error handling
-*Please indicate for each setting as well as the input data which behaviour the App is supposed to show in case of errors or NULL values/input. Please also add notes of possible errors that can happen if settings/parameters are improperly set and any other important information that you find the user should be aware of.*
 
-*Example:* **Setting `radius`:** If no radius AND no duration are given, the input data set is returned with a warning. If no radius is given (NULL), but a duration is defined then a default radius of 1000m = 1km is set. 
+`Startdate` and `Enddate` default to the first and final timestamps within the dataset, respectively.

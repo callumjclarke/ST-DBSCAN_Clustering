@@ -6,20 +6,20 @@
       "name": "Spatial connectivity radius (metres)",
       "description": "",
       "defaultValue": 25,
-      "type": "NUMERIC"
+      "type": "DOUBLE"
     },
     {
       "id": "eps2",
       "name": "Temporal connectivity radius (days)",
       "description": "",
       "defaultValue": 7,
-      "type": "NUMERIC"
+      "type": "DOUBLE"
     },
     {
       "id": "minPts",
-      "name": "Core point size",
+      "name": "Minimum connected neighbours for core point to form",
       "description": "",
-      "defaultValue": 8,
+      "defaultValue": 5,
       "type": "INTEGER"
     },
     {
@@ -27,14 +27,14 @@
       "name": "Start Date",
       "description": "",
       "defaultValue": null,
-      "type": "NUMERIC"
+      "type": "INSTANT"
     },
     {
       "id": "enddate",
       "name": "End Date",
       "description": "",
       "defaultValue": null,
-      "type": "NUMERIC"
+      "type": "INSTANT"
     }
   ],
   "dependencies": {
@@ -60,10 +60,6 @@
     ]
   },
   "providedAppFiles": [
-    {
-      "settingId": "auxiliary-file-a",
-      "from": "data/auxiliary/user-files/provided-app-files/auxiliary-file-a/sample.txt"
-    }
   ],
   "license": {
     "key": "MIT"
@@ -75,30 +71,30 @@
   ],
   "people": [
     {
-      "firstName": "Charles",
-      "middleInitials": null,
-      "lastName": "Darwin",
-      "email": "creator@example.com",
+      "firstName": "Callum",
+      "middleInitials": "J.",
+      "lastName": "Clarke",
+      "email": "cjosephclarke@outlook.com",
       "roles": [
         "author",
         "creator"
       ],
       "orcid": null,
-      "affiliation": null,
+      "affiliation": "University of St Andrews",
       "affiliationRor": null
     }
   ],
   "funding": [
     {
-      "name": "funder name",
-      "comment": "grant for App"
+      "name": "",
+      "comment": ""
     }
   ],
   "references": [
     {
       "type": "IsDescribedBy",
-      "note": "Darwin, C. 1900. The creation. Journal XY. 1-2",
-      "url": "https://anylink.xyz"
+      "note": "Birant & Kut, 2007. ST-DBSCAN: An algorithm for clustering spatio-temporal data. Data & Knowledge Engineering, Vol. 60, Issue 1, p. 208-221.",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0169023X06000218"
     }
   ]
 }
