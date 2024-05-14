@@ -23,7 +23,7 @@
       "type": "INTEGER"
     },
     {
-      "id": "Startdate",
+      "id": "startdate",
       "name": "Start Date",
       "description": "",
       "defaultValue": null,
