@@ -11,11 +11,15 @@ library('dbscan')
 # one can use the function from the logger.R file:
 # logger.fatal(), logger.error(), logger.warn(), logger.info(), logger.debug(), logger.trace()
 
+not_null <- Negate(is.null)
+`%!in%` <- Negate(`%in%`)
+
 # Showcase injecting app setting (parameter `year`)
 rFunction = function(data, 
                      eps1,
                      eps2, 
                      minPts,
+                     clustercode,
                      startdate,
                      enddate
                      ) {
@@ -40,6 +44,15 @@ rFunction = function(data,
     )
   }
   
+  # Check clustercode
+  if (not_null(clustercode)) {
+    logger.trace(paste0("Provided clustercode is ", clustercode))
+    clustercode <- paste0(clustercode, ".")
+  } else {
+    logger.warn("No clustercode provided. Defaulting no clustercode. ")
+    clustercode <- ""
+  }
+  
   
   # 2. Run ST-DBSCAN Clustering --------------------
   
@@ -50,6 +63,30 @@ rFunction = function(data,
     minpts = minPts,
     epsg = st_crs(data)
   )
+  
+  
+  # Final check + clustercode:
+  if("clust_id" %!in% names(newclusts)){
+    logger.warn(paste0(
+      "No clusters detected. Generating empty column 'clust_id', ",
+      "which is a dependency of downstream cluster-related Apps"))
+    newclusts$clust_id <- NA
+    
+  }else{
+    
+    # identify 1-location clusters
+    rem <- dplyr::count(newclusts, clust_id) |> 
+      filter(n == 1) |> 
+      pull(clust_id)
+    
+    newclusts <- newclusts |> 
+      mutate(
+        # drop cluster id for 1 location clusters
+        clust_id = ifelse(clust_id %in% rem, NA, clust_id),
+        # concatenate user-specified code as the prefix of cluster_id
+        clust_id = ifelse(!is.na(clust_id), paste0(clustercode, clust_id), NA)
+      )
+  }
   
   
   return(newclusts)
@@ -70,7 +107,7 @@ rFunction = function(data,
 #' in metric units)
 #' Outputs:
 #' - data: the input data move2 object, with an additional column named 
-#' "xy.clust" containing the cluster ID for each location
+#' "clust_id" containing the cluster ID for each location
 
 st_dbscan <- function(data, eps1, eps2, minpts, epsg = 29333) {
   
@@ -99,7 +136,7 @@ st_dbscan <- function(data, eps1, eps2, minpts, epsg = 29333) {
     warning("No clusters are identified within the dataset. Returning input")
     return(
       data %>%
-        mutate(xy.clust = NA)
+        mutate(clust_id = NA)
     )
   }
   
@@ -150,7 +187,7 @@ st_dbscan <- function(data, eps1, eps2, minpts, epsg = 29333) {
     warning("No temporal clusters have been generated. Returning")
     return(
       data %>%
-        mutate(xy.clust = NA)
+        mutate(clust_id = NA)
     )
   }
   
@@ -167,13 +204,16 @@ st_dbscan <- function(data, eps1, eps2, minpts, epsg = 29333) {
       count = n(),
       .groups = "drop"
     ) %>%
-    mutate(xy.clust = row_number()) %>%
+    mutate(clust_id = row_number()) %>%
     dplyr::select(-count)
   
   # Clean up and return:
   outdat <- allclusts %>% 
     left_join(newclusts, by = c("spatclust", "timeclust")) %>%
     dplyr::select(-c("spatclust", "timeclust", "index"))
+  
+  
+  
   
   return(outdat)
   

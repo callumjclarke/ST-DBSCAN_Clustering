@@ -23,6 +23,13 @@
       "type": "INTEGER"
     },
     {
+      "id": "clustercode",
+      "name": "Code for cluster IDs",
+      "description": "Choose a code to append to output cluster IDs.",
+      "defaultValue": "",
+      "type": "STRING"
+    },
+    {
       "id": "startdate",
       "name": "Start Date",
       "description": "",

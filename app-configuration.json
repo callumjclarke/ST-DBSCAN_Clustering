@@ -2,6 +2,7 @@
     "eps1": 25,
     "eps2": 7,
     "minPts": 8,
+    "clustercode": "test",
     "startdate": null,
     "enddate": null
 }
